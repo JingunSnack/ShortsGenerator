@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "shorts-generator"
+version = "0.1.0"
+description = ""
+authors = ["Jingun Hong <jingun.hong@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^1.25.1"
+requests = "^2.31.0"
+moviepy = "^1.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
