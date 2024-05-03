@@ -24,3 +24,15 @@ class Workspace:
 
     def get_content(self):
         return self.workspace_content_file.read_text()
+
+    def has_script_file(self):
+        return self.script_file.exists()
+
+    def has_audio_files(self):
+        return any(self.audio_dir.rglob("*.mp3"))
+
+    def has_image_files(self):
+        return any(self.image_dir.rglob("*.png"))
+
+    def has_video_file(self):
+        return self.video_file.exists()
