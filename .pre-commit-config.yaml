@@ -16,6 +16,7 @@ repos:
     rev: 1.7.8
     hooks:
       - id: bandit
+        exclude: ^tests/
 
   # Formatters
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -79,6 +80,16 @@ repos:
     hooks:
       - id: pycln
         args: [--all]
+
+  # Test
+  - repo: local
+    hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
 
   # Git helpers
   - repo: https://github.com/commitizen-tools/commitizen
