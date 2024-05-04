@@ -8,16 +8,13 @@ from shorts_generator.generators.script import generate_script_file
 
 def test_generate_script_file(tmpdir, mock_openai_client, actors):
     content = "Sample content for the script"
-    content_file = Path(tmpdir) / "content.txt"
-    content_file.write_text(content)
-
     output_file = Path(tmpdir) / "script.json"
 
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
     )
 
-    generate_script_file(mock_openai_client, actors, content_file, output_file)
+    generate_script_file(mock_openai_client, actors, content, output_file)
 
     assert output_file.read_text() == '{"script": "Generated script"}'
 
@@ -40,8 +37,6 @@ def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
     config_file = "actor_config_example.yaml"
     actors = load_actors_from_config(config_file)
     content = "Sample content for the script"
-    content_file = Path(tmpdir) / "content.txt"
-    content_file.write_text(content)
 
     output_file = Path(tmpdir) / "script.json"
 
@@ -49,7 +44,7 @@ def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
     )
 
-    generate_script_file(mock_openai_client, actors, content_file, output_file)
+    generate_script_file(mock_openai_client, actors, content, output_file)
 
     assert output_file.read_text() == '{"script": "Generated script"}'
 
@@ -71,8 +66,6 @@ def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
 def test_generate_script_file_empty_actors(tmpdir, mock_openai_client):
     actors = []
     content = "Sample content for the script"
-    content_file = Path(tmpdir) / "content.txt"
-    content_file.write_text(content)
 
     output_file = Path(tmpdir) / "script.json"
 
@@ -80,7 +73,7 @@ def test_generate_script_file_empty_actors(tmpdir, mock_openai_client):
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
     )
 
-    generate_script_file(mock_openai_client, actors, content_file, output_file)
+    generate_script_file(mock_openai_client, actors, content, output_file)
 
     assert output_file.read_text() == '{"script": "Generated script"}'
 

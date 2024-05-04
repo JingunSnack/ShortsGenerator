@@ -27,7 +27,7 @@ class ShortsGenerator:
         generate_script_file(
             self.openai_client,
             self.actors,
-            self.content_file,
+            self.content_file.read_text(),
             self.workspace.script_file,
         )
 

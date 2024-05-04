@@ -23,9 +23,7 @@ def _generate_script(client: OpenAI, actors: list[Actor], content: str):
     return response.choices[0].message.content
 
 
-def generate_script_file(
-    client: OpenAI, actors: list[Actor], content_file: Path, output_file: Path
-):
-    script = _generate_script(client, actors, content_file.read_text())
+def generate_script_file(client: OpenAI, actors: list[Actor], content: str, output_file: Path):
+    script = _generate_script(client, actors, content)
 
     output_file.write_text(script)
