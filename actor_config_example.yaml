@@ -1,7 +1,9 @@
 actors:
   - name: Alice
+    voice: nova
     traits: [enthusiastic, curious]
     unique_phrases: ["Wait, what?", "Oh, come on"]
   - name: Bob
+    voice: echo
     traits: [analytical, reserved]
     unique_phrases: ["Interesting point...", "Let me think..."]

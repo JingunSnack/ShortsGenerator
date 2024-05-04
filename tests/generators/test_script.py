@@ -2,19 +2,11 @@ import json
 from pathlib import Path
 from unittest.mock import MagicMock
 
-from shorts_generator.generators.actor import Actor, load_actors_from_config
+from shorts_generator.generators.actor import load_actors_from_config
 from shorts_generator.generators.script import generate_script_file
 
 
-def test_generate_script_file(tmpdir, mock_openai_client):
-    actors = [
-        Actor("Alice", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"]),
-        Actor(
-            "Bob",
-            ["analytical", "reserved"],
-            ["Interesting point...", "Let me think..."],
-        ),
-    ]
+def test_generate_script_file(tmpdir, mock_openai_client, actors):
     content = "Sample content for the script"
     content_file = Path(tmpdir) / "content.txt"
     content_file.write_text(content)

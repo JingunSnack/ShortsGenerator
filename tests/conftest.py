@@ -41,9 +41,10 @@ def mock_openai_client():
 @pytest.fixture
 def actors():
     return [
-        Actor("Alice", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"]),
+        Actor("Alice", "nova", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"]),
         Actor(
             "Bob",
+            "echo",
             ["analytical", "reserved"],
             ["Interesting point...", "Let me think..."],
         ),

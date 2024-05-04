@@ -2,15 +2,16 @@ from shorts_generator.generators.actor import Actor, generate_script_generation_
 
 
 def test_actor_initialization():
-    actor = Actor("Alice", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"])
+    actor = Actor("Alice", "nova", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"])
 
     assert actor.name == "Alice"
+    assert actor.voice == "nova"
     assert actor.traits == ["enthusiastic", "curious"]
     assert actor.unique_phrases == ["Wait, what?", "Oh, come on"]
 
 
 def test_generate_script_generation_prompt_single_actor():
-    actors = [Actor("Alice", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"])]
+    actors = [Actor("Alice", "nova", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"])]
     prompt = generate_script_generation_prompt(actors)
 
     assert "Alice" in prompt
@@ -22,9 +23,10 @@ def test_generate_script_generation_prompt_single_actor():
 
 def test_generate_script_generation_prompt_multiple_actors():
     actors = [
-        Actor("Alice", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"]),
+        Actor("Alice", "nova", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"]),
         Actor(
             "Bob",
+            "echo",
             ["analytical", "reserved"],
             ["Interesting point...", "Let me think..."],
         ),
@@ -52,7 +54,7 @@ def test_generate_script_generation_prompt_empty_actors():
 
 
 def test_generate_script_generation_prompt_actor_with_empty_traits_and_phrases():
-    actors = [Actor("Alice", [], [])]
+    actors = [Actor("Alice", "", [], [])]
     prompt = generate_script_generation_prompt(actors)
 
     assert "Alice" in prompt

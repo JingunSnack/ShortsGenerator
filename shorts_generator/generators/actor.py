@@ -2,8 +2,9 @@ import yaml
 
 
 class Actor:
-    def __init__(self, name, traits, unique_phrases):
+    def __init__(self, name, voice, traits, unique_phrases):
         self.name = name
+        self.voice = voice
         self.traits = traits
         self.unique_phrases = unique_phrases
 
@@ -12,7 +13,7 @@ def load_actors_from_config(config_file):
     with open(config_file) as file:
         config = yaml.safe_load(file)
         actors = [
-            Actor(actor["name"], actor["traits"], actor["unique_phrases"])
+            Actor(actor["name"], actor["voice"], actor["traits"], actor["unique_phrases"])
             for actor in config["actors"]
         ]
         return actors
