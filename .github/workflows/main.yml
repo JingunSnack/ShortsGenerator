@@ -35,6 +35,8 @@ jobs:
         poetry run pre-commit run --all-files
     - run: |
         poetry run pytest
+    - run: |
+        poetry run pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=shorts_generator tests/ | tee pytest-coverage.txt
     - uses: MishaKav/pytest-coverage-comment@main
       with:
         pytest-coverage-path: ./pytest-coverage.txt
