@@ -49,7 +49,7 @@ def test_generate_script_file(tmpdir, mock_openai_client):
 
 
 def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
-    config_file = "actor_config.yaml"
+    config_file = "actor_config_example.yaml"
     actors = load_actors_from_config(config_file)
     content = "Sample content for the script"
     output_dir = Path(tmpdir)
