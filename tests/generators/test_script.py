@@ -16,22 +16,18 @@ def test_generate_script_file(tmpdir, mock_openai_client):
         ),
     ]
     content = "Sample content for the script"
-    output_dir = Path(tmpdir)
-    file_name = "script.json"
-
-    content_file = output_dir / file_name
+    content_file = Path(tmpdir) / "content.txt"
     content_file.write_text(content)
+
+    output_file = Path(tmpdir) / "script.json"
 
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
     )
 
-    script_file = generate_script_file(
-        mock_openai_client, actors, content_file, output_dir, file_name
-    )
+    generate_script_file(mock_openai_client, actors, content_file, output_file)
 
-    assert script_file == output_dir / file_name
-    assert script_file.read_text() == '{"script": "Generated script"}'
+    assert output_file.read_text() == '{"script": "Generated script"}'
 
     mock_openai_client.chat.completions.create.assert_called_once_with(
         model="gpt-4-turbo",
@@ -52,22 +48,18 @@ def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
     config_file = "actor_config_example.yaml"
     actors = load_actors_from_config(config_file)
     content = "Sample content for the script"
-    output_dir = Path(tmpdir)
-    file_name = "script.json"
-
-    content_file = output_dir / file_name
+    content_file = Path(tmpdir) / "content.txt"
     content_file.write_text(content)
+
+    output_file = Path(tmpdir) / "script.json"
 
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
     )
 
-    script_file = generate_script_file(
-        mock_openai_client, actors, content_file, output_dir, file_name
-    )
+    generate_script_file(mock_openai_client, actors, content_file, output_file)
 
-    assert script_file == output_dir / file_name
-    assert script_file.read_text() == '{"script": "Generated script"}'
+    assert output_file.read_text() == '{"script": "Generated script"}'
 
     mock_openai_client.chat.completions.create.assert_called_once_with(
         model="gpt-4-turbo",
@@ -87,20 +79,17 @@ def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
 def test_generate_script_file_empty_actors(tmpdir, mock_openai_client):
     actors = []
     content = "Sample content for the script"
-    output_dir = Path(tmpdir)
-    file_name = "script.json"
-
-    content_file = output_dir / file_name
+    content_file = Path(tmpdir) / "content.txt"
     content_file.write_text(content)
+
+    output_file = Path(tmpdir) / "script.json"
+
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
     )
 
-    script_file = generate_script_file(
-        mock_openai_client, actors, content_file, output_dir, file_name
-    )
+    generate_script_file(mock_openai_client, actors, content_file, output_file)
 
-    assert script_file == output_dir / file_name
-    assert script_file.read_text() == '{"script": "Generated script"}'
+    assert output_file.read_text() == '{"script": "Generated script"}'
 
     mock_openai_client.chat.completions.create.assert_called_once()

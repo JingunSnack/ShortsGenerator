@@ -24,16 +24,8 @@ def _generate_script(client: OpenAI, actors: list[Actor], content: str):
 
 
 def generate_script_file(
-    client: OpenAI,
-    actors: list[Actor],
-    content_file: Path,
-    output_dir: Path,
-    file_name: str,
-) -> Path:
+    client: OpenAI, actors: list[Actor], content_file: Path, output_file: Path
+):
     script = _generate_script(client, actors, content_file.read_text())
 
-    script_file = output_dir / file_name
-
-    script_file.write_text(script)
-
-    return script_file
+    output_file.write_text(script)

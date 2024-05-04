@@ -28,8 +28,7 @@ class ShortsGenerator:
             self.openai_client,
             self.actors,
             self.content_file,
-            self.workspace.workspace_dir,
-            "script.json",
+            self.workspace.script_file,
         )
 
     def generate_audio(self):
