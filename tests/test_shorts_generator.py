@@ -24,7 +24,7 @@ def test_generate_audio(mock_openai_client, shorts_generator):
     shorts_generator.generate_audio()
 
     mock_openai_client.audio.speech.create.assert_called_once_with(
-        model="tts-1",
+        model="tts-1-hd",
         voice=to_voice(shorts_generator.actors_dict["Alice"].voice).value,
         input="Hi",
     )

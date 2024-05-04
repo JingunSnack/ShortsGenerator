@@ -16,5 +16,5 @@ def test_generate_audio_file(tmpdir, mock_openai_client):
     generate_audio_file(mock_openai_client, Voice.ALLOY, content, output_file)
 
     mock_openai_client.audio.speech.create.assert_called_once_with(
-        model="tts-1", voice=Voice.ALLOY.value, input=content
+        model="tts-1-hd", voice=Voice.ALLOY.value, input=content
     )
