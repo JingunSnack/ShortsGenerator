@@ -1,6 +1,7 @@
 import shutil
 import tempfile
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -25,3 +26,11 @@ def content_file(temp_dir):
 def workspace(temp_dir, content_file):
     workspace_dir = temp_dir / "workspace"
     return Workspace(content_file, workspace_dir)
+
+
+@pytest.fixture
+def mock_openai_client():
+    with patch("openai.OpenAI") as mock_openai:
+        mock_client = MagicMock()
+        mock_openai.return_value = mock_client
+        yield mock_client
