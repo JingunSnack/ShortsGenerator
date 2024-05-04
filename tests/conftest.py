@@ -5,6 +5,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from shorts_generator.generators.actor import Actor
+from shorts_generator.shorts_generator import ShortsGenerator
 from shorts_generator.workspace import Workspace
 
 
@@ -34,3 +36,20 @@ def mock_openai_client():
         mock_client = MagicMock()
         mock_openai.return_value = mock_client
         yield mock_client
+
+
+@pytest.fixture
+def actors():
+    return [
+        Actor("Alice", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"]),
+        Actor(
+            "Bob",
+            ["analytical", "reserved"],
+            ["Interesting point...", "Let me think..."],
+        ),
+    ]
+
+
+@pytest.fixture
+def shorts_generator(mock_openai_client, actors, content_file, workspace):
+    return ShortsGenerator(mock_openai_client, actors, content_file, workspace)
