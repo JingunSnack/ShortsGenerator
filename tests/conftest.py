@@ -5,8 +5,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from shorts_generator.generator import ShortsGenerator
 from shorts_generator.generators.actor import Actor
-from shorts_generator.shorts_generator import ShortsGenerator
 from shorts_generator.workspace import Workspace
 
 
