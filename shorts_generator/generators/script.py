@@ -34,7 +34,7 @@ explanations in the output.
     return prompt
 
 
-def _generate_script(client: OpenAI, actors: list[Actor], content: str):
+def generate_script(client: OpenAI, actors: list[Actor], content: str):
     system_prompt = generate_script_generation_prompt(actors)
 
     response = client.chat.completions.create(
@@ -53,7 +53,7 @@ def _generate_script(client: OpenAI, actors: list[Actor], content: str):
 
 
 def generate_script_file(client: OpenAI, actors: list[Actor], content: str, output_file: Path):
-    script = _generate_script(client, actors, content)
+    script = generate_script(client, actors, content)
 
     output_file.write_text(script)
 
