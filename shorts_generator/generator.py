@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from openai import OpenAI
 
 from shorts_generator.generators.actor import Actor
@@ -15,11 +13,9 @@ class ShortsGenerator:
         self,
         openai_client: OpenAI,
         actors: list[Actor],
-        content_file: Path,
         workspace: Workspace,
     ):
         self.openai_client = openai_client
-        self.content_file = content_file
         self.actors = actors
         self.actors_dict = {actor.name: actor for actor in self.actors}
         self.workspace = workspace
@@ -31,7 +27,7 @@ class ShortsGenerator:
         generate_script_file(
             self.openai_client,
             self.actors,
-            self.content_file.read_text(),
+            self.workspace.get_content(),
             self.workspace.script_file,
         )
 

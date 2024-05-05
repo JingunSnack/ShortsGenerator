@@ -52,5 +52,5 @@ def actors():
 
 
 @pytest.fixture
-def shorts_generator(mock_openai_client, actors, content_file, workspace):
-    return ShortsGenerator(mock_openai_client, actors, content_file, workspace)
+def shorts_generator(mock_openai_client, actors, workspace):
+    return ShortsGenerator(mock_openai_client, actors, workspace)
