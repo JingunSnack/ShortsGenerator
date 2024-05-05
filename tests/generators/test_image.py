@@ -6,9 +6,9 @@ import requests_mock
 from shorts_generator.generators.image import generate_image_file
 
 
-def test_generate_image_file(tmpdir, mock_openai_client):
+def test_generate_image_file(temp_dir, mock_openai_client):
     content = "Sample content for the script"
-    output_file = Path(tmpdir) / "image.png"
+    output_file = Path(temp_dir) / "image.png"
 
     mock_openai_client.images.generate.return_value = MagicMock(
         data=[MagicMock(url="http://dummy-image-url")]

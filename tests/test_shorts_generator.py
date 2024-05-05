@@ -7,7 +7,7 @@ import requests_mock
 from shorts_generator.generators.voice import to_voice
 
 
-def test_generate_script_not_implemented(mock_openai_client, shorts_generator):
+def test_generate_script(mock_openai_client, shorts_generator):
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
     )

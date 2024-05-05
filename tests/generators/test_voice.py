@@ -1,7 +1,7 @@
 from shorts_generator.generators.voice import Voice, to_voice
 
 
-def test_to_voice(tmpdir):
+def test_to_voice():
     assert to_voice("alloy") == Voice.ALLOY
     assert to_voice("echo") == Voice.ECHO
     assert to_voice("Fable") == Voice.FABLE

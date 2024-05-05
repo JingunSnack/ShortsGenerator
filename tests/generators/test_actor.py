@@ -14,11 +14,9 @@ def test_generate_script_generation_prompt_single_actor():
     actors = [Actor("Alice", "nova", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"])]
     prompt = generate_script_generation_prompt(actors)
 
-    assert "Alice" in prompt
-    assert "enthusiastic" in prompt
-    assert "curious" in prompt
-    assert "Wait, what?" in prompt
-    assert "Oh, come on" in prompt
+    assert "*   **Name**: Alice" in prompt
+    assert "*   **Traits**: enthusiastic, curious" in prompt
+    assert "*   **Unique Phrases**: Wait, what?, Oh, come on" in prompt
 
 
 def test_generate_script_generation_prompt_multiple_actors():
@@ -33,16 +31,13 @@ def test_generate_script_generation_prompt_multiple_actors():
     ]
     prompt = generate_script_generation_prompt(actors)
 
-    assert "Alice" in prompt
-    assert "enthusiastic" in prompt
-    assert "curious" in prompt
-    assert "Wait, what?" in prompt
-    assert "Oh, come on" in prompt
-    assert "Bob" in prompt
-    assert "analytical" in prompt
-    assert "reserved" in prompt
-    assert "Interesting point..." in prompt
-    assert "Let me think..." in prompt
+    assert "*   **Name**: Alice" in prompt
+    assert "*   **Traits**: enthusiastic, curious" in prompt
+    assert "*   **Unique Phrases**: Wait, what?, Oh, come on" in prompt
+
+    assert "*   **Name**: Bob" in prompt
+    assert "*   **Traits**: analytical, reserved" in prompt
+    assert "*   **Unique Phrases**: Interesting point..., Let me think..." in prompt
 
 
 def test_generate_script_generation_prompt_empty_actors():
@@ -50,13 +45,15 @@ def test_generate_script_generation_prompt_empty_actors():
     prompt = generate_script_generation_prompt(actors)
 
     assert "Actor Descriptions" in prompt
-    assert "The script should be easy to follow" in prompt
+    assert "*   **Name**:" not in prompt
+    assert "*   **Traits**:" not in prompt
+    assert "*   **Unique Phrases**:" not in prompt
 
 
 def test_generate_script_generation_prompt_actor_with_empty_traits_and_phrases():
     actors = [Actor("Alice", "", [], [])]
     prompt = generate_script_generation_prompt(actors)
 
-    assert "Alice" in prompt
-    assert "**Traits**:" in prompt
-    assert "**Unique Phrases**:" in prompt
+    assert "*   **Name**: Alice" in prompt
+    assert "*   **Traits**: \n" in prompt
+    assert "*   **Unique Phrases**: \n" in prompt
