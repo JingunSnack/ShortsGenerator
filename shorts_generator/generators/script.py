@@ -27,3 +27,8 @@ def generate_script_file(client: OpenAI, actors: list[Actor], content: str, outp
     script = _generate_script(client, actors, content)
 
     output_file.write_text(script)
+
+
+def iter_script_content(script_content: list[dict]):
+    for line in script_content:
+        yield from line.items()

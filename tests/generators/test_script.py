@@ -3,7 +3,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 from shorts_generator.generators.actor import load_actors_from_config
-from shorts_generator.generators.script import generate_script_file
+from shorts_generator.generators.script import generate_script_file, iter_script_content
 
 
 def test_generate_script_file(temp_dir, mock_openai_client, actors):
@@ -90,3 +90,17 @@ def test_generate_script_file_empty_actors(tmpdir, mock_openai_client):
             {"role": "user", "content": content},
         ],
     )
+
+
+def test_iter_script_content():
+    script_content = [
+        {"Alice": "Hi"},
+        {"Bob": "Hey"},
+        {"Alice": "Wut up"},
+    ]
+
+    iter = iter_script_content(script_content)
+
+    assert ("Alice", "Hi") == next(iter)
+    assert ("Bob", "Hey") == next(iter)
+    assert ("Alice", "Wut up") == next(iter)

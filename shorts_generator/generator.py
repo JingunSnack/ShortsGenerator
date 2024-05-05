@@ -3,8 +3,7 @@ from openai import OpenAI
 from shorts_generator.generators.actor import Actor
 from shorts_generator.generators.audio import generate_audio_file
 from shorts_generator.generators.image import generate_image_file
-from shorts_generator.generators.script import generate_script_file
-from shorts_generator.generators.util import iter_script_content
+from shorts_generator.generators.script import generate_script_file, iter_script_content
 from shorts_generator.generators.voice import to_voice
 from shorts_generator.workspace import Workspace
 
