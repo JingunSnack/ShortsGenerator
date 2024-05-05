@@ -1,8 +1,8 @@
 from pathlib import Path
 from unittest.mock import MagicMock
 
+from shorts_generator.configs.voice import Voice
 from shorts_generator.generators.audio import generate_audio_file
-from shorts_generator.generators.voice import Voice
 
 
 def test_generate_audio_file(temp_dir, mock_openai_client):

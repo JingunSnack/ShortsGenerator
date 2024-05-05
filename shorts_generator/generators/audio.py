@@ -2,7 +2,7 @@ from pathlib import Path
 
 from openai import OpenAI
 
-from shorts_generator.generators.voice import Voice
+from shorts_generator.configs.voice import Voice
 
 
 def generate_audio_file(client: OpenAI, voice: Voice, content: str, output_file: Path):

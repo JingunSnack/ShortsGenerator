@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import pytest
 import requests_mock
 
-from shorts_generator.generators.voice import to_voice
+from shorts_generator.configs.voice import to_voice
 
 
 def test_generate_script(mock_openai_client, shorts_generator):

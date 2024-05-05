@@ -1,4 +1,4 @@
-from shorts_generator.generators.voice import Voice, to_voice
+from shorts_generator.configs.voice import Voice, to_voice
 
 
 def test_to_voice():
