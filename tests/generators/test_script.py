@@ -2,7 +2,7 @@ import json
 from unittest.mock import MagicMock
 
 from shorts_generator.configs.actor import Actor, load_actors_from_config
-from shorts_generator.generators.script import (
+from shorts_generator.generators import (
     generate_script_file,
     generate_script_generation_prompt,
     iter_script_content,

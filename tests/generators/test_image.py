@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 import requests_mock
 
-from shorts_generator.generators.image import generate_image_file
+from shorts_generator.generators import generate_image_file
 
 
 def test_generate_image_file(temp_dir, mock_openai_client):
