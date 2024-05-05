@@ -62,7 +62,7 @@ repos:
     rev: v1.10.0
     hooks:
       - id: mypy
-        additional_dependencies: [types-pyyaml==6.0.12.20240311]
+        additional_dependencies: [types-pyyaml, types-requests]
 
   # Code Correctors
   - repo: https://github.com/asottile/pyupgrade
