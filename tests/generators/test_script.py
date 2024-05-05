@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 from unittest.mock import MagicMock
 
 from shorts_generator.configs.actor import Actor, load_actors_from_config
@@ -12,7 +11,7 @@ from shorts_generator.generators.script import (
 
 def test_generate_script_file(temp_dir, mock_openai_client, actors):
     content = "Sample content for the script"
-    output_file = Path(temp_dir) / "script.json"
+    output_file = temp_dir / "script.json"
 
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
@@ -37,12 +36,21 @@ def test_generate_script_file(temp_dir, mock_openai_client, actors):
     )
 
 
-def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
-    config_file = "actor_config_example.yaml"
+def test_generate_script_file_actor_config(temp_dir, mock_openai_client):
+    config_file = temp_dir / "config.yaml"
+    config_file.write_text(
+        """\
+actors:
+  - name: Alice
+    voice: nova
+    traits: [enthusiastic, curious]
+    unique_phrases: ["Wait, what?", "Oh, come on"]"""
+    )
+
     actors = load_actors_from_config(config_file)
     content = "Sample content for the script"
 
-    output_file = Path(tmpdir) / "script.json"
+    output_file = temp_dir / "script.json"
 
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
@@ -67,11 +75,11 @@ def test_generate_script_file_actor_config(tmpdir, mock_openai_client):
     )
 
 
-def test_generate_script_file_empty_actors(tmpdir, mock_openai_client):
+def test_generate_script_file_empty_actors(temp_dir, mock_openai_client):
     actors = []
     content = "Sample content for the script"
 
-    output_file = Path(tmpdir) / "script.json"
+    output_file = temp_dir / "script.json"
 
     mock_openai_client.chat.completions.create.return_value = MagicMock(
         choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
