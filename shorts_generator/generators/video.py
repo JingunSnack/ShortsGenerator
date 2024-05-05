@@ -38,7 +38,7 @@ def create_text_clips(script_content: list[dict], audio_clips: list[AudioFileCli
             text_clip = TextClip(
                 partial_content,
                 fontsize=120,
-                font="Futura-Condensed-ExtraBold",
+                font="Lato-Semibold",
                 color="white",
                 stroke_color="black",
                 stroke_width=3,
