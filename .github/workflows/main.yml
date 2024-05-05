@@ -1,11 +1,8 @@
 on:
   push:
     branches: [main]
-
-permissions:
-  contents: write
-  checks: write
-  pull-requests: write
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
@@ -15,9 +12,6 @@ jobs:
     - run: |
         sudo sed -i "s/none/read,write/g" /etc/ImageMagick-6/policy.xml
     - uses: actions/checkout@v2
-      with:
-        persist-credentials: false
-        fetch-depth: 0
     - uses: actions/setup-python@v2
       with:
         python-version: 3.11
