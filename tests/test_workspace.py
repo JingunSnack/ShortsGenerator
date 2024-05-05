@@ -51,12 +51,36 @@ def test_has_audio_files(workspace):
     assert workspace.has_audio_files()
 
 
+def test_get_audio_files(workspace):
+    audio_file1 = workspace.audio_dir / "000.mp3"
+    audio_file2 = workspace.audio_dir / "001.mp3"
+    audio_file3 = workspace.audio_dir / "002.mp3"
+
+    audio_file1.touch()
+    audio_file2.touch()
+    audio_file3.touch()
+
+    assert workspace.get_audio_files() == [audio_file1, audio_file2, audio_file3]
+
+
 def test_has_image_files(workspace):
     assert not workspace.has_image_files()
 
     image_file = workspace.image_dir / "image1.png"
     image_file.touch()
     assert workspace.has_image_files()
+
+
+def test_get_image_files(workspace):
+    image_file1 = workspace.image_dir / "000.png"
+    image_file2 = workspace.image_dir / "001.png"
+    image_file3 = workspace.image_dir / "002.png"
+
+    image_file1.touch()
+    image_file2.touch()
+    image_file3.touch()
+
+    assert workspace.get_image_files() == [image_file1, image_file2, image_file3]
 
 
 def test_has_video_file(workspace):

@@ -36,8 +36,14 @@ class Workspace:
     def has_audio_files(self):
         return any(self.audio_dir.rglob("*.mp3"))
 
+    def get_audio_files(self):
+        return sorted(self.audio_dir.rglob("*.mp3"))
+
     def has_image_files(self):
         return any(self.image_dir.rglob("*.png"))
+
+    def get_image_files(self):
+        return sorted(self.image_dir.rglob("*.png"))
 
     def has_video_file(self):
         return self.video_file.exists()
