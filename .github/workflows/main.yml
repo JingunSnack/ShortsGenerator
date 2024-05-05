@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - run: |
-        sed -i "s/none/read,write/g" /etc/ImageMagick-6/policy.xml
+        sudo sed -i "s/none/read,write/g" /etc/ImageMagick-6/policy.xml
     - uses: actions/checkout@v2
       with:
         persist-credentials: false
