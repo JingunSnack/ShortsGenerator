@@ -1,3 +1,4 @@
+import json
 import shutil
 from pathlib import Path
 
@@ -27,6 +28,10 @@ class Workspace:
 
     def has_script_file(self):
         return self.script_file.exists()
+
+    def get_script_content(self):
+        script_content = self.script_file.read_text()
+        return json.loads(script_content)
 
     def has_audio_files(self):
         return any(self.audio_dir.rglob("*.mp3"))

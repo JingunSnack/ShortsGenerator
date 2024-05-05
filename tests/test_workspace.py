@@ -37,6 +37,12 @@ def test_has_script_file(workspace):
     assert workspace.has_script_file()
 
 
+def test_get_script_content(workspace):
+    workspace.script_file.write_text('[{"Alice": "Hi"}]')
+
+    assert workspace.get_script_content() == [{"Alice": "Hi"}]
+
+
 def test_has_audio_files(workspace):
     assert not workspace.has_audio_files()
 

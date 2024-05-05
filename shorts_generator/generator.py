@@ -4,7 +4,7 @@ from shorts_generator.generators.actor import Actor
 from shorts_generator.generators.audio import generate_audio_file
 from shorts_generator.generators.image import generate_image_file
 from shorts_generator.generators.script import generate_script_file
-from shorts_generator.generators.util import iter_script_content, load_script_content
+from shorts_generator.generators.util import iter_script_content
 from shorts_generator.generators.voice import to_voice
 from shorts_generator.workspace import Workspace
 
@@ -36,9 +36,9 @@ class ShortsGenerator:
         if self.workspace.has_audio_files():
             return
 
-        script_content = load_script_content(self.workspace.script_file)
-
-        for idx, (speaker, content) in enumerate(iter_script_content(script_content)):
+        for idx, (speaker, content) in enumerate(
+            iter_script_content(self.workspace.get_script_content())
+        ):
             generate_audio_file(
                 client=self.openai_client,
                 voice=to_voice(self.actors_dict[speaker].voice),
@@ -50,9 +50,9 @@ class ShortsGenerator:
         if self.workspace.has_image_files():
             return
 
-        script_content = load_script_content(self.workspace.script_file)
-
-        for idx, (_, content) in enumerate(iter_script_content(script_content)):
+        for idx, (_, content) in enumerate(
+            iter_script_content(self.workspace.get_script_content())
+        ):
             generate_image_file(
                 client=self.openai_client,
                 content=content,

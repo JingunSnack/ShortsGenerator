@@ -1,13 +1,4 @@
-from pathlib import Path
-
-from shorts_generator.generators.util import iter_script_content, load_script_content
-
-
-def test_load_script_content(temp_dir):
-    script_file = Path(temp_dir) / "script.json"
-    script_file.write_text('[{"Alice": "hi"}]')
-
-    assert load_script_content(script_file) == [{"Alice": "hi"}]
+from shorts_generator.generators.util import iter_script_content
 
 
 def test_iter_script_content():
