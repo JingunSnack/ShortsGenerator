@@ -5,3 +5,4 @@ from shorts_generator.generators.script import (  # noqa
     generate_script_generation_prompt,
     iter_script_content,
 )
+from shorts_generator.generators.video import generate_video_file  # noqa
