@@ -25,3 +25,7 @@ And you may add/remove/modify actors in the configuraiton file. Please refer to 
 ```bash
 generate-shorts --config-file config.yaml --content-file input.txt --workspace-dir ./output/
 ```
+
+## Example Youtube channels
+
+- [@AliceWaBob](https://www.youtube.com/@AliceWaBob)
