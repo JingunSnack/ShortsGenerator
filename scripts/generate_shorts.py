@@ -6,7 +6,6 @@ import yaml
 from openai import OpenAI
 
 from shorts_generator.configs.actor import Actor
-from shorts_generator.configs.voice import to_voice
 from shorts_generator.generator import ShortsGenerator
 from shorts_generator.workspace import Workspace
 
@@ -38,15 +37,8 @@ def main():
         config = yaml.safe_load(f)
 
     client = OpenAI(api_key=config["openai_api_key"])
-    actors = [
-        Actor(
-            actor["name"],
-            to_voice(actor["voice"]),
-            actor["traits"],
-            actor["unique_phrases"],
-        )
-        for actor in config["actors"]
-    ]
+
+    actors = [Actor.from_dict(actor) for actor in config["actors"]]
 
     Path(args.workspace_dir).mkdir(parents=True, exist_ok=True)
 
