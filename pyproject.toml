@@ -5,6 +5,11 @@ description = ""
 authors = ["Jingun Hong <jingun.hong@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/python-poetry/poetry"
+packages = [
+    { include = "shorts_generator" },
+    { include = "scripts/**/*.py" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -12,6 +17,7 @@ openai = "^1.25.1"
 requests = "^2.31.0"
 moviepy = "^1.0.3"
 argparse = "^1.4.0"
+pyyaml = "^6.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
