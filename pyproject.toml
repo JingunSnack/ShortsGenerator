@@ -18,6 +18,7 @@ requests = "^2.31.0"
 moviepy = "^1.0.3"
 argparse = "^1.4.0"
 pyyaml = "^6.0.1"
+pillow = "9.5.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"

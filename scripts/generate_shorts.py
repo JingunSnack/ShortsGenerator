@@ -18,13 +18,25 @@ def parse_args():
         description="Generate YoutubeShorts using GenAI",
     )
     parser.add_argument(
-        "--config-file", type=str, required=True, help="Patgh to the configuration file"
+        "--config-file", type=str, required=True, help="Path to the configuration file"
     )
     parser.add_argument(
         "--workspace-dir",
         type=str,
         required=True,
         help="Path to the workspace directory",
+    )
+    parser.add_argument(
+        "--num-images",
+        type=int,
+        required=False,
+        default=2,
+        help="Number of images to be generated",
+    )
+    parser.add_argument(
+        "--zoom-image",
+        help="Activate zooming images in the Shorts",
+        action="store_true",
     )
     parser.add_argument("--content-file", type=str, required=True, help="Path to the content file")
     return parser.parse_args()
@@ -44,6 +56,12 @@ def main():
 
     workspace = Workspace(args.content_file, args.workspace_dir)
 
-    shorts_generator = ShortsGenerator(client, actors, workspace)
+    shorts_generator = ShortsGenerator(
+        openai_client=client,
+        actors=actors,
+        workspace=workspace,
+        num_images=args.num_images,
+        zoom_image=args.zoom_image,
+    )
 
     shorts_generator.generate_video()

@@ -23,7 +23,7 @@ Before running the script, you have to provide an OpenAI API key in the configur
 And you may add/remove/modify actors in the configuraiton file. Please refer to `config_example.yaml`.
 
 ```bash
-generate-shorts --config-file config.yaml --content-file input.txt --workspace-dir ./output/
+generate-shorts --config-file config.yaml --content-file input.txt --workspace-dir ./output/ --num-images 4 --zoom-image
 ```
 
 ## Example Youtube channels

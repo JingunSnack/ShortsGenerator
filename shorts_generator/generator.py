@@ -12,12 +12,14 @@ class ShortsGenerator:
         actors: list[Actor],
         workspace: Workspace,
         num_images: int = 2,
+        zoom_image: bool = False,
     ):
         self.openai_client = openai_client
         self.actors = actors
         self.actors_dict = {actor.name: actor for actor in self.actors}
         self.workspace = workspace
         self.num_images = num_images
+        self.zoom_image = zoom_image
 
     def generate_script(self):
         if self.workspace.has_script_file():
@@ -68,5 +70,6 @@ class ShortsGenerator:
             actors_dict=self.actors_dict,
             audio_files=self.workspace.get_audio_files(),
             image_files=self.workspace.get_image_files(),
+            zoom_image=self.zoom_image,
             output_file=self.workspace.video_file,
         )

@@ -18,10 +18,13 @@ def generate_video_file(
     audio_files: list[Path],
     image_files: list[Path],
     output_file: Path,
+    zoom_image: bool = False,
 ):
     audio_clips = create_audio_clips(audio_files)
     text_clips = create_text_clips(script_content, audio_clips, actors_dict)
-    image_clips = create_image_clips(image_files, sum(clip.duration for clip in audio_clips))
+    image_clips = create_image_clips(
+        image_files, sum(clip.duration for clip in audio_clips), zoom_image=zoom_image
+    )
 
     CompositeVideoClip(image_clips + text_clips).set_audio(
         CompositeAudioClip(audio_clips)
@@ -69,11 +72,22 @@ def create_text_clips(
     return text_clips
 
 
-def create_image_clips(image_files: list[Path], total_duration):
+def create_image_clips(image_files: list[Path], total_duration, zoom_image=False):
     duration = total_duration / len(image_files)
 
+    if not zoom_image:
+        return [
+            ImageClip(str(image_file)).set_start(idx * duration).set_duration(duration)
+            for idx, image_file in enumerate(image_files)
+        ]
+
+    zoom_ratio = 1.2  # TBD
+
     return [
-        ImageClip(str(image_file)).set_start(idx * duration).set_duration(duration)
+        ImageClip(str(image_file))
+        .set_start(idx * duration)
+        .set_duration(duration)
+        .resize(lambda t: 1 + (zoom_ratio - 1) * t / duration)
         for idx, image_file in enumerate(image_files)
     ]
 
