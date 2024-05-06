@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "shorts-generator"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["Jingun Hong <jingun.hong@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/python-poetry/poetry"
+repository = "https://github.com/JingunSnack/ShortsGenerator"
 packages = [
     { include = "shorts_generator" },
     { include = "scripts/**/*.py" },
