@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from moviepy.audio.fx.volumex import volumex
 from moviepy.editor import (
     AudioFileClip,
     CompositeAudioClip,
@@ -19,28 +20,35 @@ def generate_video_file(
     image_files: list[Path],
     output_file: Path,
     zoom_image: bool = False,
+    bgm_file: Path | None = None,
 ):
     audio_clips = create_audio_clips(audio_files)
     text_clips = create_text_clips(script_content, audio_clips, actors_dict)
-    image_clips = create_image_clips(
-        image_files, sum(clip.duration for clip in audio_clips), zoom_image=zoom_image
-    )
+
+    total_duration = sum(clip.duration for clip in audio_clips)
+
+    image_clips = create_image_clips(image_files, total_duration, zoom_image=zoom_image)
+
+    if bgm_file:
+        audio_clips.append(
+            AudioFileClip(str(bgm_file)).fx(volumex, 0.05).set_duration(total_duration)
+        )
+
     video_clip = CompositeVideoClip(image_clips + text_clips).set_audio(
         CompositeAudioClip(audio_clips)
     )
 
-    # TBD
     if video_clip.duration >= 60:
         video_clip = video_clip.speedx(factor=video_clip.duration / 59.5)
 
     video_clip.write_videofile(str(output_file), fps=24)
 
 
-def create_audio_clips(audio_files: list[Path]):
+def create_audio_clips(audio_files: list[Path]) -> list[AudioFileClip]:
     audio_clips = []
     offset = 0
     for file in audio_files:
-        audio_clips.append(AudioFileClip(str(file)).set_start(offset))
+        audio_clips.append(AudioFileClip(str(file)).fx(volumex, 1.5).set_start(offset))
         offset += audio_clips[-1].duration
 
     return audio_clips
@@ -50,7 +58,7 @@ def create_text_clips(
     script_content: list[dict],
     audio_clips: list[AudioFileClip],
     actors_dict: dict[str, Actor],
-):
+) -> list[TextClip]:
     text_clips = []
     for idx, (speaker, content) in enumerate(iter_script_content(script_content)):
         offset = 0
@@ -77,7 +85,9 @@ def create_text_clips(
     return text_clips
 
 
-def create_image_clips(image_files: list[Path], total_duration, zoom_image=False):
+def create_image_clips(
+    image_files: list[Path], total_duration, zoom_image=False
+) -> list[ImageClip]:
     duration = total_duration / len(image_files)
 
     if not zoom_image:

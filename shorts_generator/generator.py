@@ -71,5 +71,8 @@ class ShortsGenerator:
             audio_files=self.workspace.get_audio_files(),
             image_files=self.workspace.get_image_files(),
             zoom_image=self.zoom_image,
+            bgm_file=(
+                self.workspace.workspace_bgm_file if self.workspace.has_background_music() else None
+            ),
             output_file=self.workspace.video_file,
         )

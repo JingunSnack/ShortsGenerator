@@ -91,4 +91,5 @@ def test_generate_video(shorts_generator, actors):
             image_files=shorts_generator.workspace.get_image_files(),
             output_file=shorts_generator.workspace.video_file,
             zoom_image=shorts_generator.zoom_image,
+            bgm_file=None,
         )
