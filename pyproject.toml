@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "shorts-generator"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Jingun Hong <jingun.hong@gmail.com>"]
 license = "MIT"
