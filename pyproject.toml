@@ -11,8 +11,7 @@ python = "^3.11"
 openai = "^1.25.1"
 requests = "^2.31.0"
 moviepy = "^1.0.3"
-python-dotenv = "^1.0.1"
-
+argparse = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
@@ -23,3 +22,6 @@ requests-mock = "^1.12.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+generate-shorts = "scripts.generate_shorts:main"
