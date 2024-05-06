@@ -1,117 +1,82 @@
 import json
-from unittest.mock import MagicMock
-
-import pytest
-import requests_mock
+from unittest.mock import patch
 
 from shorts_generator.configs.voice import to_voice
 
 
-def test_generate_script(mock_openai_client, shorts_generator):
-    mock_openai_client.chat.completions.create.return_value = MagicMock(
-        choices=[MagicMock(message=MagicMock(content=json.dumps({"script": "Generated script"})))]
-    )
-    shorts_generator.generate_script()
+def test_generate_script(shorts_generator):
+    with patch("shorts_generator.generators.generate_script_file") as mock_generate_script_file:
+        shorts_generator.workspace.content_file.write_text("Sample content")
 
-    assert shorts_generator.workspace.has_script_file()
+        shorts_generator.generate_script()
 
-
-def test_generate_audio(mock_openai_client, shorts_generator):
-    shorts_generator.workspace.script_file.write_text('[{"Alice": "Hi"}]')
-    mock_openai_client.audio.speech.create.return_value = MagicMock(
-        stream_to_file=MagicMock(return_value=None)
-    )
-
-    shorts_generator.generate_audio()
-
-    mock_openai_client.audio.speech.create.assert_called_once_with(
-        model="tts-1-hd",
-        voice=to_voice(shorts_generator.actors_dict["Alice"].voice).value,
-        input="Hi",
-    )
+        mock_generate_script_file.assert_called_once_with(
+            shorts_generator.openai_client,
+            shorts_generator.actors,
+            shorts_generator.workspace.get_content(),
+            shorts_generator.workspace.script_file,
+        )
 
 
-def test_generate_image(mock_openai_client, shorts_generator):
-    shorts_generator.workspace.script_file.write_text('[{"Alice": "Hi"}]')
+def test_generate_audio(shorts_generator, actors):
+    with patch("shorts_generator.generators.generate_audio_file") as mock_generate_audio_file:
+        script_content = [{actors[0].name: "Hi", actors[1].name: "Hello"}]
+        shorts_generator.workspace.script_file.write_text(json.dumps(script_content))
 
-    output_file = shorts_generator.workspace.image_dir / "000.png"
+        shorts_generator.generate_audio()
 
-    mock_openai_client.images.generate.return_value = MagicMock(
-        data=[MagicMock(url="http://dummy-image-url")]
-    )
+        assert mock_generate_audio_file.call_count == 2
 
-    with requests_mock.Mocker() as mock_requests:
-        mock_requests.get("http://dummy-image-url", content=b"dummy image content")
+        mock_generate_audio_file.assert_any_call(
+            client=shorts_generator.openai_client,
+            voice=to_voice(actors[0].voice),
+            content="Hi",
+            output_file=shorts_generator.workspace.audio_dir / "000.mp3",
+        )
+        mock_generate_audio_file.assert_any_call(
+            client=shorts_generator.openai_client,
+            voice=to_voice(actors[1].voice),
+            content="Hello",
+            output_file=shorts_generator.workspace.audio_dir / "001.mp3",
+        )
+
+
+def test_generate_image(shorts_generator, actors):
+    with patch("shorts_generator.generators.generate_image_file") as mock_generate_image_file:
+        script_content = [{actors[0].name: "Hi", actors[1].name: "Hello"}]
+        shorts_generator.workspace.script_file.write_text(json.dumps(script_content))
 
         shorts_generator.generate_image()
 
-    mock_openai_client.images.generate.assert_called_once_with(
-        model="dall-e-2",
-        prompt="Hi",
-        size="256x256",
-        quality="standard",
-        n=1,
-    )
+        assert mock_generate_image_file.call_count == 2
 
-    assert output_file.exists()
-    assert output_file.read_bytes() == b"dummy image content"
-
-
-def test_generate_video_not_implemented(mock_openai_client, shorts_generator):
-    mock_openai_client.chat.completions.create.return_value = MagicMock(
-        choices=[MagicMock(message=MagicMock(content=json.dumps([{"Alice": "Hi"}])))]
-    )
-    mock_openai_client.audio.speech.create.return_value = MagicMock(
-        stream_to_file=MagicMock(return_value=None)
-    )
-    mock_openai_client.images.generate.return_value = MagicMock(
-        data=[MagicMock(url="http://dummy-image-url")]
-    )
-
-    with requests_mock.Mocker() as mock_requests:
-        mock_requests.get("http://dummy-image-url", content=b"dummy image content")
-
-        with pytest.raises(NotImplementedError):
-            shorts_generator.generate_video()
+        mock_generate_image_file.assert_any_call(
+            client=shorts_generator.openai_client,
+            content="Hi",
+            output_file=shorts_generator.workspace.image_dir / "000.png",
+        )
+        mock_generate_image_file.assert_any_call(
+            client=shorts_generator.openai_client,
+            content="Hello",
+            output_file=shorts_generator.workspace.image_dir / "001.png",
+        )
 
 
-def test_generate_video_script_exists(mock_openai_client, shorts_generator):
-    shorts_generator.workspace.script_file.write_text('[{"Alice": "Hi"}]')
-    mock_openai_client.audio.speech.create.return_value = MagicMock(
-        stream_to_file=MagicMock(return_value=None)
-    )
-    mock_openai_client.images.generate.return_value = MagicMock(
-        data=[MagicMock(url="http://dummy-image-url")]
-    )
+def test_generate_video(shorts_generator, actors):
+    with patch("shorts_generator.generators.generate_video_file") as mock_generate_video_file:
+        shorts_generator.workspace.script_file.write_text('[{"Alice": "Hi"}, {"Bob": "Hello"}]')
 
-    with requests_mock.Mocker() as mock_requests:
-        mock_requests.get("http://dummy-image-url", content=b"dummy image content")
+        (shorts_generator.workspace.audio_dir / "000.mp3").touch()
+        (shorts_generator.workspace.audio_dir / "001.mp3").touch()
 
-        with pytest.raises(NotImplementedError):
-            shorts_generator.generate_video()
+        (shorts_generator.workspace.image_dir / "000.png").touch()
+        (shorts_generator.workspace.image_dir / "001.png").touch()
 
-
-def test_generate_video_audio_exists(mock_openai_client, shorts_generator):
-    shorts_generator.workspace.script_file.write_text('[{"Alice": "Hi"}]')
-    audio_file = shorts_generator.workspace.audio_dir / "audio.mp3"
-    audio_file.touch()
-
-    mock_openai_client.images.generate.return_value = MagicMock(
-        data=[MagicMock(url="http://dummy-image-url")]
-    )
-
-    with requests_mock.Mocker() as mock_requests:
-        mock_requests.get("http://dummy-image-url", content=b"dummy image content")
-
-        with pytest.raises(NotImplementedError):
-            shorts_generator.generate_video()
-
-
-def test_generate_video_image_exists(shorts_generator):
-    shorts_generator.workspace.script_file.touch()
-    audio_file = shorts_generator.workspace.audio_dir / "audio.mp3"
-    audio_file.touch()
-    image_file = shorts_generator.workspace.image_dir / "image.png"
-    image_file.touch()
-    with pytest.raises(NotImplementedError):
         shorts_generator.generate_video()
+
+        mock_generate_video_file.assert_called_once_with(
+            script_content=shorts_generator.workspace.get_script_content(),
+            audio_files=shorts_generator.workspace.get_audio_files(),
+            image_files=shorts_generator.workspace.get_image_files(),
+            output_file=shorts_generator.workspace.video_file,
+        )

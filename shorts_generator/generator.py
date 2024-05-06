@@ -1,13 +1,8 @@
 from openai import OpenAI
 
+from shorts_generator import generators
 from shorts_generator.configs.actor import Actor
 from shorts_generator.configs.voice import to_voice
-from shorts_generator.generators import (
-    generate_audio_file,
-    generate_image_file,
-    generate_script_file,
-    iter_script_content,
-)
 from shorts_generator.workspace import Workspace
 
 
@@ -27,7 +22,7 @@ class ShortsGenerator:
         if self.workspace.has_script_file():
             return
 
-        generate_script_file(
+        generators.generate_script_file(
             self.openai_client,
             self.actors,
             self.workspace.get_content(),
@@ -39,9 +34,9 @@ class ShortsGenerator:
             return
 
         for idx, (speaker, content) in enumerate(
-            iter_script_content(self.workspace.get_script_content())
+            generators.iter_script_content(self.workspace.get_script_content())
         ):
-            generate_audio_file(
+            generators.generate_audio_file(
                 client=self.openai_client,
                 voice=to_voice(self.actors_dict[speaker].voice),
                 content=content,
@@ -53,9 +48,9 @@ class ShortsGenerator:
             return
 
         for idx, (_, content) in enumerate(
-            iter_script_content(self.workspace.get_script_content())
+            generators.iter_script_content(self.workspace.get_script_content())
         ):
-            generate_image_file(
+            generators.generate_image_file(
                 client=self.openai_client,
                 content=content,
                 output_file=self.workspace.image_dir / f"{idx:03}.png",
@@ -69,4 +64,9 @@ class ShortsGenerator:
         self.generate_audio()
         self.generate_image()
 
-        raise NotImplementedError
+        generators.generate_video_file(
+            script_content=self.workspace.get_script_content(),
+            audio_files=self.workspace.get_audio_files(),
+            image_files=self.workspace.get_image_files(),
+            output_file=self.workspace.video_file,
+        )
