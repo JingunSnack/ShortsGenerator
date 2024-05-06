@@ -5,7 +5,18 @@ actors:
     voice: nova
     traits: [enthusiastic, curious]
     unique_phrases: ["Wait, what?", "Oh, come on"]
+    text_font: Arial
+    text_font_size: 120
+    text_color: white
+    text_stroke_color: black
+    text_stroke_width: 3
+
   - name: Bob
     voice: echo
     traits: [analytical, reserved]
     unique_phrases: ["Interesting point...", "Let me think..."]
+    text_font: Arial
+    text_font_size: 120
+    text_color: white
+    text_stroke_color: black
+    text_stroke_width: 3

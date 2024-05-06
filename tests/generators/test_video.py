@@ -51,7 +51,7 @@ def test_create_image_clips():
         assert image_clip.end == (idx + 1) * (total_duration / len(image_files))
 
 
-def test_create_text_clips():
+def test_create_text_clips(actors):
     script_content = [
         {
             "Alice": (
@@ -75,7 +75,9 @@ def test_create_text_clips():
 
     audio_clips = create_audio_clips(audio_files)
 
-    text_clips = create_text_clips(script_content, audio_clips)
+    actors_dict = {actor.name: actor for actor in actors}
+
+    text_clips = create_text_clips(script_content, audio_clips, actors_dict)
 
     assert len(text_clips) == sum(
         len(_split_content(content, limit=10)) for _, content in iter_script_content(script_content)
@@ -97,7 +99,7 @@ def test_create_text_clips():
             offset += text_clip.duration
 
 
-def test_generate_video_file(temp_dir):
+def test_generate_video_file(temp_dir, actors):
     script_content = [
         {
             "Alice": (
@@ -124,10 +126,13 @@ def test_generate_video_file(temp_dir):
         tests_dir / "samples" / "image" / "001.png",
     ]
 
+    actors_dict = {actor.name: actor for actor in actors}
+
     output_file = temp_dir / "video.mp4"
 
     generate_video_file(
         script_content=script_content,
+        actors_dict=actors_dict,
         audio_files=audio_files,
         image_files=image_files,
         output_file=output_file,

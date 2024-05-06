@@ -65,6 +65,7 @@ class ShortsGenerator:
 
         generators.generate_video_file(
             script_content=self.workspace.get_script_content(),
+            actors_dict=self.actors_dict,
             audio_files=self.workspace.get_audio_files(),
             image_files=self.workspace.get_image_files(),
             output_file=self.workspace.video_file,

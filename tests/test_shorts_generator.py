@@ -86,6 +86,7 @@ def test_generate_video(shorts_generator, actors):
 
         mock_generate_video_file.assert_called_once_with(
             script_content=shorts_generator.workspace.get_script_content(),
+            actors_dict=shorts_generator.actors_dict,
             audio_files=shorts_generator.workspace.get_audio_files(),
             image_files=shorts_generator.workspace.get_image_files(),
             output_file=shorts_generator.workspace.video_file,

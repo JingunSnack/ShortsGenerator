@@ -8,17 +8,19 @@ from moviepy.editor import (
     TextClip,
 )
 
+from shorts_generator.configs.actor import Actor
 from shorts_generator.generators import iter_script_content
 
 
 def generate_video_file(
     script_content: list[dict],
+    actors_dict: dict[str, Actor],
     audio_files: list[Path],
     image_files: list[Path],
     output_file: Path,
 ):
     audio_clips = create_audio_clips(audio_files)
-    text_clips = create_text_clips(script_content, audio_clips)
+    text_clips = create_text_clips(script_content, audio_clips, actors_dict)
     image_clips = create_image_clips(image_files, sum(clip.duration for clip in audio_clips))
 
     CompositeVideoClip(image_clips + text_clips).set_audio(
@@ -36,18 +38,22 @@ def create_audio_clips(audio_files: list[Path]):
     return audio_clips
 
 
-def create_text_clips(script_content: list[dict], audio_clips: list[AudioFileClip]):
+def create_text_clips(
+    script_content: list[dict],
+    audio_clips: list[AudioFileClip],
+    actors_dict: dict[str, Actor],
+):
     text_clips = []
-    for idx, (_, content) in enumerate(iter_script_content(script_content)):
+    for idx, (speaker, content) in enumerate(iter_script_content(script_content)):
         offset = 0
         for partial_content in _split_content(content, limit=10):
             text_clip = TextClip(
                 partial_content,
-                fontsize=120,
-                font="Lato-Semibold",
-                color="white",
-                stroke_color="black",
-                stroke_width=3,
+                font=actors_dict[speaker].text_font,
+                fontsize=actors_dict[speaker].text_font_size,
+                color=actors_dict[speaker].text_color,
+                stroke_color=actors_dict[speaker].text_stroke_color,
+                stroke_width=actors_dict[speaker].text_stroke_width,
             )
             duration = audio_clips[idx].duration * len(partial_content) / len(content)
             text_clip = (
