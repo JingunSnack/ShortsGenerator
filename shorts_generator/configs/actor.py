@@ -8,7 +8,7 @@ class Actor:
         voice: Voice,
         traits: list[str],
         unique_phrases: list[str],
-        text_font: str = "Arial",
+        text_font: str = "Lato-Semibold",
         text_font_size: int = 120,
         text_color: str = "white",
         text_stroke_color: str = "black",
