@@ -31,7 +31,7 @@ class Actor:
             voice=to_voice(actor_dict["voice"]),
             traits=actor_dict.get("traits", []),
             unique_phrases=actor_dict.get("unique_phrases", []),
-            text_font=actor_dict.get("text_font", "Arial"),
+            text_font=actor_dict.get("text_font", "Lato-Semibold"),
             text_font_size=actor_dict.get("text_font_size", 120),
             text_color=actor_dict.get("text_color", "white"),
             text_stroke_color=actor_dict.get("text_stroke_color", "black"),
