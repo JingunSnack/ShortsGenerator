@@ -31,7 +31,8 @@ class Workspace:
 
     def get_script_content(self):
         script_content = self.script_file.read_text()
-        return json.loads(script_content)
+        for _, value in json.loads(script_content).items():
+            return value
 
     def has_audio_files(self):
         return any(self.audio_dir.rglob("*.mp3"))

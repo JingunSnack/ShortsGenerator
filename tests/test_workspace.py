@@ -38,7 +38,7 @@ def test_has_script_file(workspace):
 
 
 def test_get_script_content(workspace):
-    workspace.script_file.write_text('[{"Alice": "Hi"}]')
+    workspace.script_file.write_text('{"script": [{"Alice": "Hi"}]}')
 
     assert workspace.get_script_content() == [{"Alice": "Hi"}]
 

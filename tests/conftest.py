@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from shorts_generator.configs.actor import Actor
+from shorts_generator.configs.voice import to_voice
 from shorts_generator.generator import ShortsGenerator
 from shorts_generator.workspace import Workspace
 
@@ -41,10 +42,15 @@ def mock_openai_client():
 @pytest.fixture
 def actors():
     return [
-        Actor("Alice", "nova", ["enthusiastic", "curious"], ["Wait, what?", "Oh, come on"]),
+        Actor(
+            "Alice",
+            to_voice("nova"),
+            ["enthusiastic", "curious"],
+            ["Wait, what?", "Oh, come on"],
+        ),
         Actor(
             "Bob",
-            "echo",
+            to_voice("echo"),
             ["analytical", "reserved"],
             ["Interesting point...", "Let me think..."],
         ),

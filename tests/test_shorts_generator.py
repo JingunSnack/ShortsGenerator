@@ -1,7 +1,4 @@
-import json
 from unittest.mock import patch
-
-from shorts_generator.configs.voice import to_voice
 
 
 def test_generate_script(shorts_generator):
@@ -20,8 +17,12 @@ def test_generate_script(shorts_generator):
 
 def test_generate_audio(shorts_generator, actors):
     with patch("shorts_generator.generators.generate_audio_file") as mock_generate_audio_file:
-        script_content = [{actors[0].name: "Hi", actors[1].name: "Hello"}]
-        shorts_generator.workspace.script_file.write_text(json.dumps(script_content))
+        assert actors[0].name == "Alice"
+        assert actors[1].name == "Bob"
+
+        shorts_generator.workspace.script_file.write_text(
+            '{ "script": [ {"Alice": "Hi"}, {"Bob": "Hello"} ] }'
+        )
 
         shorts_generator.generate_audio()
 
@@ -29,13 +30,13 @@ def test_generate_audio(shorts_generator, actors):
 
         mock_generate_audio_file.assert_any_call(
             client=shorts_generator.openai_client,
-            voice=to_voice(actors[0].voice),
+            voice=actors[0].voice,
             content="Hi",
             output_file=shorts_generator.workspace.audio_dir / "000.mp3",
         )
         mock_generate_audio_file.assert_any_call(
             client=shorts_generator.openai_client,
-            voice=to_voice(actors[1].voice),
+            voice=actors[1].voice,
             content="Hello",
             output_file=shorts_generator.workspace.audio_dir / "001.mp3",
         )
@@ -43,28 +44,37 @@ def test_generate_audio(shorts_generator, actors):
 
 def test_generate_image(shorts_generator, actors):
     with patch("shorts_generator.generators.generate_image_file") as mock_generate_image_file:
-        script_content = [{actors[0].name: "Hi", actors[1].name: "Hello"}]
-        shorts_generator.workspace.script_file.write_text(json.dumps(script_content))
+        assert actors[0].name == "Alice"
+        assert actors[1].name == "Bob"
+
+        shorts_generator.workspace.script_file.write_text(
+            '{ "script": [ {"Alice": "Hi"}, {"Bob": "Hello"} ] }'
+        )
 
         shorts_generator.generate_image()
 
-        assert mock_generate_image_file.call_count == 2
+        assert mock_generate_image_file.call_count == shorts_generator.num_images
 
         mock_generate_image_file.assert_any_call(
             client=shorts_generator.openai_client,
-            content="Hi",
+            script_content=shorts_generator.workspace.get_script_content(),
             output_file=shorts_generator.workspace.image_dir / "000.png",
         )
         mock_generate_image_file.assert_any_call(
             client=shorts_generator.openai_client,
-            content="Hello",
+            script_content=shorts_generator.workspace.get_script_content(),
             output_file=shorts_generator.workspace.image_dir / "001.png",
         )
 
 
 def test_generate_video(shorts_generator, actors):
     with patch("shorts_generator.generators.generate_video_file") as mock_generate_video_file:
-        shorts_generator.workspace.script_file.write_text('[{"Alice": "Hi"}, {"Bob": "Hello"}]')
+        assert actors[0].name == "Alice"
+        assert actors[1].name == "Bob"
+
+        shorts_generator.workspace.script_file.write_text(
+            '{ "script": [ {"Alice": "Hi"}, {"Bob": "Hello"} ] }'
+        )
 
         (shorts_generator.workspace.audio_dir / "000.mp3").touch()
         (shorts_generator.workspace.audio_dir / "001.mp3").touch()

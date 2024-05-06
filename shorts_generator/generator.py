@@ -2,7 +2,6 @@ from openai import OpenAI
 
 from shorts_generator import generators
 from shorts_generator.configs.actor import Actor
-from shorts_generator.configs.voice import to_voice
 from shorts_generator.workspace import Workspace
 
 
@@ -12,11 +11,13 @@ class ShortsGenerator:
         openai_client: OpenAI,
         actors: list[Actor],
         workspace: Workspace,
+        num_images: int = 2,
     ):
         self.openai_client = openai_client
         self.actors = actors
         self.actors_dict = {actor.name: actor for actor in self.actors}
         self.workspace = workspace
+        self.num_images = num_images
 
     def generate_script(self):
         if self.workspace.has_script_file():
@@ -38,7 +39,7 @@ class ShortsGenerator:
         ):
             generators.generate_audio_file(
                 client=self.openai_client,
-                voice=to_voice(self.actors_dict[speaker].voice),
+                voice=self.actors_dict[speaker].voice,
                 content=content,
                 output_file=self.workspace.audio_dir / f"{idx:03}.mp3",
             )
@@ -47,12 +48,10 @@ class ShortsGenerator:
         if self.workspace.has_image_files():
             return
 
-        for idx, (_, content) in enumerate(
-            generators.iter_script_content(self.workspace.get_script_content())
-        ):
+        for idx in range(self.num_images):
             generators.generate_image_file(
                 client=self.openai_client,
-                content=content,
+                script_content=self.workspace.get_script_content(),
                 output_file=self.workspace.image_dir / f"{idx:03}.png",
             )
 

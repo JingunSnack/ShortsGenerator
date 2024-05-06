@@ -3,12 +3,18 @@ from pathlib import Path
 import requests
 from openai import OpenAI
 
+from shorts_generator.generators.script import iter_script_content
 
-def generate_image_file(client: OpenAI, content: str, output_file: Path):
+
+def generate_image_file(client: OpenAI, script_content: list[dict], output_file: Path):
+    content = "\n".join(
+        f"{speaker}: {content}" for speaker, content in iter_script_content(script_content)
+    )
+
     response = client.images.generate(
-        model="dall-e-2",
+        model="dall-e-3",
         prompt=content,
-        size="256x256",
+        size="1024x1792",
         quality="standard",
         n=1,
     )
