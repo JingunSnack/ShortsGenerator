@@ -1,3 +1,5 @@
+openai_api_key: sk-1234567890abcdef
+
 actors:
   - name: Alice
     voice: nova
