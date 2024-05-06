@@ -73,7 +73,7 @@ def test_create_text_clips():
         tests_dir / "samples" / "audio" / "001.mp3",
     ]
 
-    audio_clips = [AudioFileClip(str(file)) for file in audio_files]
+    audio_clips = create_audio_clips(audio_files)
 
     text_clips = create_text_clips(script_content, audio_clips)
 
@@ -81,16 +81,18 @@ def test_create_text_clips():
         len(_split_content(content, limit=10)) for _, content in iter_script_content(script_content)
     )
 
-    offset = 0
     for idx, (_, content) in enumerate(iter_script_content(script_content)):
+        offset = 0
         for partial_content in _split_content(content, limit=10):
-            text_clip = next((clip for clip in text_clips if clip.start == offset), None)
+            text_clip = [
+                clip for clip in text_clips if clip.start == audio_clips[idx].start + offset
+            ][0]
+
             assert isinstance(text_clip, TextClip)
-            assert text_clip.start == offset
+            assert text_clip.start == audio_clips[idx].start + offset
             assert text_clip.duration == audio_clips[idx].duration * len(partial_content) / len(
                 content
             )
-            assert text_clip.end == offset + text_clip.duration
 
             offset += text_clip.duration
 

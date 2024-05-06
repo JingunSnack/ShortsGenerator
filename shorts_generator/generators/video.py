@@ -27,13 +27,19 @@ def generate_video_file(
 
 
 def create_audio_clips(audio_files: list[Path]):
-    return [AudioFileClip(str(file)) for file in audio_files]
+    audio_clips = []
+    offset = 0
+    for file in audio_files:
+        audio_clips.append(AudioFileClip(str(file)).set_start(offset))
+        offset += audio_clips[-1].duration
+
+    return audio_clips
 
 
 def create_text_clips(script_content: list[dict], audio_clips: list[AudioFileClip]):
     text_clips = []
-    offset = 0
     for idx, (_, content) in enumerate(iter_script_content(script_content)):
+        offset = 0
         for partial_content in _split_content(content, limit=10):
             text_clip = TextClip(
                 partial_content,
@@ -44,7 +50,11 @@ def create_text_clips(script_content: list[dict], audio_clips: list[AudioFileCli
                 stroke_width=3,
             )
             duration = audio_clips[idx].duration * len(partial_content) / len(content)
-            text_clip = text_clip.set_position("center").set_start(offset).set_duration(duration)
+            text_clip = (
+                text_clip.set_position("center")
+                .set_start(audio_clips[idx].start + offset)
+                .set_duration(duration)
+            )
             text_clip = text_clip.crossfadein(0.01).crossfadeout(0.01)
             text_clips.append(text_clip)
 
