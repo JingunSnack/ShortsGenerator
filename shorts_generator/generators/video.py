@@ -25,10 +25,15 @@ def generate_video_file(
     image_clips = create_image_clips(
         image_files, sum(clip.duration for clip in audio_clips), zoom_image=zoom_image
     )
-
-    CompositeVideoClip(image_clips + text_clips).set_audio(
+    video_clip = CompositeVideoClip(image_clips + text_clips).set_audio(
         CompositeAudioClip(audio_clips)
-    ).write_videofile(str(output_file), fps=24)
+    )
+
+    # TBD
+    if video_clip.duration >= 60:
+        video_clip = video_clip.speedx(factor=video_clip.duration / 59.5)
+
+    video_clip.write_videofile(str(output_file), fps=24)
 
 
 def create_audio_clips(audio_files: list[Path]):
